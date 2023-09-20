@@ -8,10 +8,11 @@ def getenv(name: str) -> str:
     val = os.getenv(name)
     if val is None:
         raise ValueError('Missing environment variable {}'.format(name))
+    return val
 
 @app.before_first_request
 def create_tables():
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+    app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DB_URI')
     db.init_app(app)
     with app.app_context():
         db.create_all()
